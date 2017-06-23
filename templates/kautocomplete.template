@@ -1,0 +1,75 @@
+import React from 'react'
+import { Link } from 'react-router-dom'
+import Autocomplete from 'react-autocomplete'
+import Config from 'appconfig'
+import ServiceAPIRequest from 'actions/ServiceAPIRequest'
+
+class {{moduleStartCase}}Autocomplete extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loading: false,
+
+      {{moduleNameLowerCase}}: null,
+      {{moduleStartCase}}Name: '',
+      {{moduleNameLowerCase}}s: []
+    }
+
+    this.fetch{{moduleStartCase}}s = this.fetch{{moduleStartCase}}s.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ {{moduleStartCase}}Name: nextProps.value })
+  }
+
+  fetch{{moduleStartCase}}s(query) {
+    var request = new ServiceAPIRequest({
+      url: Config.WebServiceURL + "OData/{{moduleStartCase}}s?$filter=indexof(Name,'" + query + "') eq 0",
+      method: "GET",
+      completed: function (data) {
+        this.setState({ {{moduleNameLowerCase}}s: data.value, loading: false })
+      }.bind(this),
+      failed: function (err) {
+        this.setState({ {{moduleNameLowerCase}}s: [], loading: false })
+      }.bind(this)
+    })
+
+    request.send()
+  }
+
+  render() {
+    return (
+      <div>
+        <Autocomplete
+          wrapperStyle={{ position: 'relative', display: 'block' }}
+          renderMenu={(items, value, style) => {
+            style = Config.AutoCompleteStyle
+            var menuStyle = { cursor: 'pointer' }
+            return <div style={{ ...style, menuStyle }} children={items} />
+          }}
+          inputProps={{ name: '{{moduleStartCase}}Name', id: '{{moduleStartCase}}Name', className: 'form-control', type: 'text' }}
+          ref='autocomplete'
+          value={this.state.{{moduleStartCase}}Name}
+          items={this.state.{{moduleNameLowerCase}}s}
+          getItemValue={(item) => item.Name}
+          onSelect={({{moduleNameLowerCase}}, item) => {
+            this.props.onSelect(item)
+          }}
+          onChange={(event, {{moduleNameLowerCase}}) => {
+            this.setState({ loading: true, {{moduleStartCase}}Name: event.target.value })
+            this.fetch{{moduleStartCase}}s({{moduleNameLowerCase}})
+          }}
+          renderItem={(item, isHighlighted) => (
+            <div
+              style={isHighlighted ? { spacing: 5 } : {}}
+              key={'{{moduleNameLowerCase}}' + item.{{moduleStartCase}}Id}
+              id={item.{{moduleStartCase}}Id}
+            >{item.Name}</div>
+          )}
+        />
+      </div>
+    )
+  }
+}
+
+export default {{moduleStartCase}}Autocomplete

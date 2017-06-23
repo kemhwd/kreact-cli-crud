@@ -1,0 +1,49 @@
+import Config from 'appconfig'
+import Actions from 'actions/{{moduleStartCase}}Actions'
+import AltInstance from 'lib/AltInstance'
+
+class {{moduleStartCase}}DetailStore {
+    constructor() {
+        
+      this.exportPublicMethods({
+        setState: this.setState
+      })
+      
+      this.{{moduleNameLowerCase}} = {}
+      this.errorMessage = null
+      this.bindListeners({
+        handleFetchSingleUpdate: Actions.{{moduleNameUpperCase}}_UPDATED,
+        handleFetchSingleFailure: Actions.{{moduleNameUpperCase}}_FAILED,
+	      handleSaved: Actions.SAVED_{{moduleNameUpperCase}},
+	      handleUpdated: Actions.UPDATED_{{moduleNameUpperCase}}
+      });
+
+      this.handleFetchSingleUpdate = this.handleFetchSingleUpdate.bind(this)
+      this.handleFetchSingleFailure = this.handleFetchSingleFailure.bind(this)
+    }
+
+    handleFetchSingleUpdate({{moduleNameLowerCase}}) {
+      this.{{moduleNameLowerCase}} = {{moduleNameLowerCase}}
+      this.errorMessage = null
+    }
+
+    handleFetchSingleFailure(errorMessage) {
+      this.errorMessage = errorMessage
+    }
+
+		handleSaved({{moduleNameLowerCase}}) {
+  		this.{{moduleNameLowerCase}} = {{moduleNameLowerCase}}
+			this.action = 'saved'
+    	this.errorMessage = null
+		}
+
+		handleUpdated({{moduleNameLowerCase}}) {
+  		this.{{moduleNameLowerCase}} = {{moduleNameLowerCase}}
+			this.action = 'updated'
+    	this.errorMessage = null
+		}
+
+
+}
+
+export default AltInstance.createStore({{moduleStartCase}}DetailStore, '{{moduleStartCase}}DetailStore')

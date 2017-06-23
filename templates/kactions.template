@@ -1,0 +1,165 @@
+import Moment from 'moment'
+import AltInstance from 'lib/AltInstance'
+import Config from 'appconfig'
+import ServiceAPIRequest from 'actions/ServiceAPIRequest'
+import {{moduleStartCase}}Store from 'stores/{{moduleStartCase}}Store'
+
+class {{moduleStartCase}}Actions {
+  constructor(props) {
+
+  }
+
+  // Private
+  _fetchGet(query) {
+    var request = new ServiceAPIRequest({
+      url: Config.WebServiceURL + query,
+      method: "GET",
+      completed: function (data) {
+        this.update{{moduleStartCase}}s(data.value)
+      }.bind(this),
+      failed: function (err) {
+        this.{{moduleNameLowerCase}}sFailed(err)
+      }.bind(this)
+    })
+
+    request.send()
+  }
+
+  // Public
+  save{{moduleStartCase}}({{moduleNameLowerCase}}) {
+    return (dispatch) => {
+      dispatch()
+      var query = ""
+      var method = "POST"
+      successHandler = function (data) {
+        this.saved{{moduleStartCase}}({{moduleNameLowerCase}});
+      }.bind(this)
+
+      var postData = {
+        {{#listData}}
+        {{dataOrig}}: {{moduleNameLowerCase}}.{{dataOrig}},
+        {{/listData}}
+				Status: true,
+				Created: new Date(Moment().format("YYYY-MM-DD hh:mm:ss"))
+      }
+
+      {{#listData}}
+      if(postData.{{dataOrig}} == '') delete postData.{{dataOrig}}
+      {{/listData}}
+
+      if ({{moduleNameLowerCase}}.{{moduleStartCase}}Id && {{moduleNameLowerCase}}.{{moduleStartCase}}Id != "") {
+        // Update
+        query = "(" + {{moduleNameLowerCase}}.{{moduleStartCase}}Id + ")"
+        method = "PATCH"
+        var successHandler = function (data) {
+          this.updated{{moduleStartCase}}({{moduleNameLowerCase}})
+        }.bind(this)
+      }
+
+      var request = new ServiceAPIRequest({
+        url: Config.WebServiceURL + "OData/{{moduleStartCase}}s" + query,
+        method: method,
+        completed: successHandler,
+        failed: function (err) {
+          this.{{moduleNameLowerCase}}sFailed(err)
+        }.bind(this),
+        data: postData
+      })
+
+      request.send()
+    }
+  }
+  saved{{moduleStartCase}}({{moduleNameLowerCase}}) {
+    return {{moduleNameLowerCase}}
+  }
+  updated{{moduleStartCase}}({{moduleNameLowerCase}}) {
+    return {{moduleNameLowerCase}}
+  }
+  remove{{moduleStartCase}}({{moduleNameLowerCase}}) {
+    return (dispatch) => {
+      dispatch()
+
+      var request = new ServiceAPIRequest({
+        url: Config.WebServiceURL + "OData/{{moduleStartCase}}s(" + {{moduleNameLowerCase}}.{{moduleStartCase}}Id + ")",
+        method: "DELETE",
+        completed: function (data) {
+          this.removed{{moduleStartCase}}({{moduleNameLowerCase}})
+        }.bind(this),
+        failed: function (err) {
+          this.{{moduleNameLowerCase}}sFailed(err)
+        }.bind(this)
+      })
+
+      request.send()
+    }
+  }
+  removed{{moduleStartCase}}({{moduleNameLowerCase}}) {
+    return {{moduleNameLowerCase}}
+  }
+  found{{moduleStartCase}}({{moduleNameLowerCase}}) {
+    return {{moduleNameLowerCase}}
+  }
+  edit{{moduleStartCase}}({{moduleNameLowerCase}}) {
+    return {{moduleNameLowerCase}}
+  }
+  update{{moduleStartCase}}s({{moduleNameLowerCase}}s) {
+    return {{moduleNameLowerCase}}s
+  }
+  search{{moduleStartCase}}s(search = '') {
+    return (dispatch) => {
+      dispatch()
+      var query = "";
+
+      if (search != "") {
+        // Add filters query here
+        // query = "&$filter={{#listData}} indexof({{dataOrig}}, '" + search + "') eq 0 or {{/listData}}";
+      }
+
+      
+      this._fetchGet("OData/{{moduleStartCase}}s?$expand=person" + query)
+
+    }
+  }
+  query{{moduleStartCase}}s(raw) {
+    return (dispatch) => {
+      dispatch()
+      this._fetchGet("OData/{{moduleStartCase}}s" + raw)
+    }
+  }
+  {{moduleNameLowerCase}}sFailed(errorMessage) {
+    return errorMessage;
+  }
+
+  // Single {{moduleStartCase}}
+
+  find{{moduleStartCase}}({{moduleNameLowerCase}}Id) {
+    return (dispatch) => {
+      dispatch()
+
+      var request = new ServiceAPIRequest({
+        url: Config.WebServiceURL + "OData/{{moduleStartCase}}s(" + {{moduleNameLowerCase}}Id + ")",
+        method: "GET",
+        completed: function (data) {
+          this.{{moduleNameLowerCase}}Updated(data)
+        }.bind(this),
+        failed: function (err) {
+          this.{{moduleNameLowerCase}}Failed(err)
+        }.bind(this)
+      })
+
+      request.send()
+
+    }
+  }
+
+  {{moduleNameLowerCase}}Updated({{moduleNameLowerCase}}) {
+    return {{moduleNameLowerCase}};
+  }
+
+  {{moduleNameLowerCase}}Failed(errorMessage) {
+    return errorMessage;
+  }
+
+}
+
+export default AltInstance.createActions({{moduleStartCase}}Actions);

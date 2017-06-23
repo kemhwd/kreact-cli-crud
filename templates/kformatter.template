@@ -1,0 +1,20 @@
+import React from 'react'
+import { Link } from 'react-router-dom'
+
+class {{moduleStartCase}}Formatter extends React.Component {
+	constructor(props) {
+    super(props);
+	}
+
+	render() {
+    return(
+      <Link to={'/{{moduleNameLowerCase}}s/' + this.props.value.{{moduleStartCase}}Id + '/edit'}>
+        {{#listData}}
+        {this.props.value.{{dataOrig}}}<br/>
+        {{/listData}}
+      </Link>
+    )
+  }
+}
+
+export default {{moduleStartCase}}Formatter

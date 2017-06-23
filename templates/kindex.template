@@ -1,0 +1,66 @@
+import React from 'react'
+import AltInstance from 'lib/AltInstance'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { intlShape, injectIntl } from 'react-intl'
+import {{moduleStartCase}}Messages from 'resources/messages/{{moduleStartCase}}Messages'
+import {{moduleStartCase}}List from 'components/{{moduleStartCase}}s/{{moduleStartCase}}List'
+import {{moduleStartCase}}Form from 'components/{{moduleStartCase}}s/{{moduleStartCase}}Form'
+import Actions from 'actions/{{moduleStartCase}}Actions'
+
+class {{moduleStartCase}}Index extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {}
+
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.addNew = this.addNew.bind(this)
+  }
+
+  handleInputChange(e) {
+    e.preventDefault()
+    var name = e.target.name
+    var state = this.state
+    state[name] = e.target.value
+    this.setState(state)
+    Actions.search{{moduleStartCase}}s(e.target.value)
+  }
+  
+  addNew(e) {
+    e.preventDefault()
+		AltInstance.recycle()
+    var snapshot = AltInstance.takeSnapshot()
+    console.log('Recycled state: ', snapshot)
+    this.props.history.push('/{{moduleNameLowerCase}}_add')
+  }
+
+  render() {
+    const { formatMessage } = this.props.intl
+
+    return (
+      <div>
+        <div className="row">
+          <div className="col">
+            <form className="form-inline">
+              <div className="input-group mb-2 mr-sm-2 mb-sm-0">
+                <div className="input-group-addon"><i className="fa fa-search"></i></div>
+                <input type="text" className="form-control" id="Search" name="Search" value={this.state.Search} onChange={this.handleInputChange} placeholder="Search..." />
+              </div>
+              <a href="#" className="btn btn-primary" onClick={this.addNew}>
+                <i className="fa fa-plus"></i> {formatMessage({{moduleStartCase}}Messages.Add{{moduleStartCase}})}
+              </a>
+            </form>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <{{moduleStartCase}}List />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+}
+
+export default injectIntl({{moduleStartCase}}Index)

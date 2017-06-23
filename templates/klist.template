@@ -1,0 +1,112 @@
+import React from 'react'
+import ReactDataGrid from 'react-data-grid'
+import ReactConfirm from 'react-confirm-bootstrap'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { intlShape, injectIntl } from 'react-intl'
+import {{moduleStartCase}}Messages from 'resources/messages/{{moduleStartCase}}Messages'
+import {{moduleStartCase}}Store from 'stores/{{moduleStartCase}}Store'
+import Actions from 'actions/{{moduleStartCase}}Actions'
+
+class RowActionsFormatter extends React.Component {
+
+	constructor(props) {
+		super(props)
+		this.deleteRow = this.deleteRow.bind(this)
+	}
+
+	deleteRow() {
+		Actions.remove{{moduleStartCase}}(this.props.value)
+	}
+
+	render() {
+		const { formatMessage } = this.props.intl
+
+		return (
+			<div>
+				<Link className="btn btn-info" to={'/{{moduleStartCase}}s/' + this.props.value.{{moduleStartCase}}Id + '/edit'}>
+					{formatMessage({{moduleStartCase}}Messages.Edit)}
+				</Link>
+				<ReactConfirm
+					onConfirm={this.deleteRow}
+					body={formatMessage({{moduleStartCase}}Messages.AreYouSureDelete)}
+					confirmText={formatMessage({{moduleStartCase}}Messages.ConfirmDelete)}
+					title={formatMessage({{moduleStartCase}}Messages.Delete)}>
+					<button className="btn btn-danger">{formatMessage({{moduleStartCase}}Messages.Delete)}</button>
+				</ReactConfirm>
+			</div>
+		)
+	}
+
+}
+
+RowActionsFormatter.propTypes = {
+	intl: intlShape.isRequired,
+}
+
+class {{moduleStartCase}}List extends React.Component {
+
+	constructor(props) {
+		super(props)
+		this.oDataQuery = '' // '?$expand=brand' // use this to join another table
+		const { formatMessage } = this.props.intl
+
+		this._columns = [
+      {{#listData}}
+        { key: '{{dataOrig}}', name: formatMessage({{moduleStartCase}}Messages.{{dataOrig}}) },
+      {{/listData}}
+			{
+				key: 'actions',
+				name: formatMessage({{moduleStartCase}}Messages.Actions),
+				formatter: injectIntl(RowActionsFormatter)
+			}
+		]
+
+		this.state = { rows: [] }
+		this.listChanged = this.listChanged.bind(this)
+		this.rowGetter = this.rowGetter.bind(this)
+		this.rowCount = this.rowCount.bind(this)
+	}
+
+	componentDidMount() {
+		{{moduleStartCase}}Store.listen(this.listChanged)
+		Actions.query{{moduleStartCase}}s(this.oDataQuery)
+	}
+
+	componentWillUnmount() {
+		{{moduleStartCase}}Store.unlisten(this.listChanged)
+	}
+
+	rowGetter(i) {
+		this.state.rows[i].actions = this.state.rows[i]
+		return this.state.rows[i]
+	}
+
+	rowCount() {
+		return this.state.rows.length
+	}
+
+	listChanged(store) {
+		console.log('List updated: ', store)
+		this.setState({ rows: store.{{moduleNameLowerCase}}s })
+	}
+
+	render() {
+		return (
+			<ReactDataGrid
+				columns={this._columns}
+				rowGetter={this.rowGetter}
+				rowsCount={this.rowCount()}
+				rowHeight={60}
+				minHeight={500} />
+		);
+	}
+
+}
+
+
+{{moduleStartCase}}List.propTypes = {
+	intl: intlShape.isRequired,
+};
+
+
+export default injectIntl({{moduleStartCase}}List)

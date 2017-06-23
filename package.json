@@ -1,0 +1,64 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "/projects/kreact-cli-crud",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "/projects/kreact-cli-crud",
+        "spec": "C:\\projects\\kreact-cli-crud",
+        "type": "directory"
+      },
+      "C:\\projects"
+    ]
+  ],
+  "_from": "..\\..\\..\\..\\..\\projects\\kreact-cli-crud",
+  "_id": "kreact-cli-crud@0.0.1",
+  "_inCache": true,
+  "_location": "/kreact-cli-crud",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "/projects/kreact-cli-crud",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "/projects/kreact-cli-crud",
+    "spec": "C:\\projects\\kreact-cli-crud",
+    "type": "directory"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "file:..\\..\\..\\..\\..\\projects\\kreact-cli-crud",
+  "_shasum": "61f4e746869372c101bebad6bd3d44217dcc6e67",
+  "_shrinkwrap": null,
+  "_spec": "/projects/kreact-cli-crud",
+  "_where": "C:\\projects",
+  "author": "",
+  "bin": {
+    "kcrud": "./index.js"
+  },
+  "dependencies": {
+    "colors": "^1.1.2",
+    "commander": "^2.9.0",
+    "lodash": "^4.11.1",
+    "mustache": "^2.2.1",
+    "promise": "^7.1.1"
+  },
+  "description": "Need imprementation",
+  "devDependencies": {},
+  "files": [
+    "index.js",
+    "templates"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "kreact-cli-crud",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.1"
+}

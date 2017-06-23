@@ -1,0 +1,67 @@
+import Config from 'appconfig'
+import Actions from 'actions/{{moduleStartCase}}Actions'
+import AltInstance from 'lib/AltInstance'
+
+class {{moduleStartCase}}Store {
+  constructor() {
+    this.{{moduleNameLowerCase}}s = []
+    this.errorMessage = null
+    this.bindListeners({
+      saved: Actions.SAVED_{{moduleNameUpperCase}},
+      updated: Actions.UPDATED_{{moduleNameUpperCase}},
+      removed: Actions.REMOVED_{{moduleNameUpperCase}},
+      handleFetchUpdate: Actions.UPDATE_{{moduleNameUpperCase}}S,
+      handleFetchFailure: Actions.{{moduleNameUpperCase}}S_FAILED
+    });
+
+    this.handleSubmitSuccess = this.handleSubmitSuccess.bind(this)
+    this.saved = this.saved.bind(this)
+    this.removed = this.removed.bind(this)
+  }
+
+  handleFetchUpdate({{moduleNameLowerCase}}s) {
+    this.{{moduleNameLowerCase}}s = {{moduleNameLowerCase}}s
+    this.errorMessage = null
+  }
+
+  handleFetchFailure(errorMessage) {
+    this.errorMessage = errorMessage
+  }
+
+  saved({{moduleNameLowerCase}}) {
+    this.{{moduleNameLowerCase}}s.push({{moduleNameLowerCase}})
+    return this
+  }
+
+  updated({{moduleNameLowerCase}}) {
+    var _foundIndex = -1;
+    this.{{moduleNameLowerCase}}s.map((item, index) => {
+      if (item.{{moduleStartCase}}Id == {{moduleNameLowerCase}}.{{moduleStartCase}}Id) {
+        _foundIndex = index
+      }
+    })
+
+    if (_foundIndex >= 0) {
+      this.{{moduleNameLowerCase}}s[_foundIndex] = {{moduleNameLowerCase}}
+    }
+
+    return this
+  }
+
+  handleSubmitSuccess(data) {
+    console.log(this.{{moduleNameLowerCase}}s)
+  }
+
+  handleSubmitFailure(e) {
+    console.log(e)
+  }
+
+  removed({{moduleNameLowerCase}}) {
+    let _index = this.{{moduleNameLowerCase}}s.indexOf({{moduleNameLowerCase}})
+    this.{{moduleNameLowerCase}}s.splice(_index, 1)
+    console.log("Removed: ", {{moduleNameLowerCase}})
+  }
+
+}
+
+export default AltInstance.createStore({{moduleStartCase}}Store, '{{moduleStartCase}}Store')

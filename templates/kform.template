@@ -1,0 +1,160 @@
+import React from 'react'
+import AltInstance from 'lib/AltInstance'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { intlShape, injectIntl } from 'react-intl'
+import Select from 'react-select'
+import Config from 'appconfig'
+import ServiceAPIRequest from 'actions/ServiceAPIRequest'
+import {{moduleStartCase}}Messages from 'resources/messages/{{moduleStartCase}}Messages'
+import {{moduleStartCase}}DetailStore from 'stores/{{moduleStartCase}}DetailStore'
+import Actions from 'actions/{{moduleStartCase}}Actions'
+
+// Brand
+// import BrandAutocomplete from 'components/Brands/BrandAutocomplete'
+
+class {{moduleStartCase}}Form extends React.Component {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      {{#listData}}
+      {{dataOrig}}: '',
+      {{/listData}}
+
+      loading: false
+      /*
+      // For child object
+      brand: null,
+      BrandName: ''
+      */
+    }
+
+    // Handle if route has passed ID param
+    if (props.match && props.match.params && props.match.params.id) {
+      Actions.find{{moduleStartCase}}(props.match.params.id)
+    }
+
+    this.save{{moduleStartCase}} = this.save{{moduleStartCase}}.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.dataChanged = this.dataChanged.bind(this)
+    /*
+    // Sample use of autocomplete field
+    this.openBrandForm = this.openBrandForm.bind(this)
+    */
+    this.saveState = this.saveState.bind(this)
+    this.restoreState = this.restoreState.bind(this)
+  }
+
+  componentDidMount() {
+    console.log(this.props.location)
+    this.restoreState()
+    if (this.props.location.state) {
+      this.setState(this.props.location.state)
+    }
+    {{moduleStartCase}}DetailStore.listen(this.dataChanged)
+  }
+
+  componentWillUnmount() {
+    {{moduleStartCase}}DetailStore.unlisten(this.dataChanged)
+    this.saveState()
+  }
+
+  dataChanged() {
+    if ({{moduleStartCase}}DetailStore.getState().errorMessage) {
+      alert({{moduleStartCase}}DetailStore.getState().errorMessage)
+    } else {
+      if ({{moduleStartCase}}DetailStore.getState().{{moduleNameLowerCase}}.brand) this.setState({ BrandName: {{moduleStartCase}}DetailStore.getState().{{moduleNameLowerCase}}.brand.Name })
+      this.setState({{moduleStartCase}}DetailStore.getState().{{moduleNameLowerCase}})
+    }
+  }
+
+  save{{moduleStartCase}}(e) {
+    e.preventDefault()
+    if (typeof (this.state.{{moduleStartCase}}Type) === 'object') {
+      this.state.{{moduleStartCase}}Type = this.state.{{moduleStartCase}}Type.value
+    }
+    /*
+    // For child object handle save in case user did not select
+    if (this.state.BrandId == '' || this.state.BrandId === null) {
+      if (this.state.brands.length > 0) {
+        this.state.brand = this.state.brands[0]
+        this.state.BrandId = this.state.brands[0].BrandId
+      }
+    }
+    */
+    Actions.save{{moduleStartCase}}(this.state)
+    this.props.history.goBack()
+  }
+
+  handleInputChange(e) {
+    e.preventDefault()
+    var name = e.target.name
+    var state = this.state
+    state[name] = e.target.value
+    this.setState(state)
+  }
+
+  restoreState() {
+    try {
+      AltInstance.rollback({{moduleStartCase}}DetailStore)
+    }
+    catch (err) {
+      console.log(err)
+    }
+    
+    this.setState({{moduleStartCase}}DetailStore.getState().{{moduleNameLowerCase}})
+  }
+
+  saveState() {
+    {{moduleStartCase}}DetailStore.setState({ {{moduleNameLowerCase}}: this.state })
+    AltInstance.takeSnapshot({{moduleStartCase}}DetailStore)
+  }
+  
+  /*
+  // For adding child object
+  openBrandForm(e) {
+    e.preventDefault()
+    this.saveState()
+    this.props.history.push('/brand_add', { redirect: '/{{moduleNameLowerCase}}_add' })
+  }
+  */
+
+  /*
+  // Add this to DOM for auto complete field and add child object button
+        <div className="form-group">
+          <label className="control-label" htmlFor="BrandId">{formatMessage({{moduleStartCase}}Messages.BrandId)}:</label>
+          <BrandAutocomplete
+            value={this.state.BrandName}
+            onSelect={(item) => {
+              this.setState({ brand: item, BrandId: item.BrandId, BrandName: item.Name })
+            }}
+          />
+          <button onClick={this.openBrandForm} className="btn btn-info pull-right small-add-btn">
+            <i className="fa fa-plus"></i>
+          </button>
+        </div>
+  */
+
+  render() {
+    const { formatMessage } = this.props.intl
+    return (
+      <form className="form" onSubmit={this.save{{moduleStartCase}}}>
+        {{#listData}}
+        <div className="form-group">
+          <label className="control-label" htmlFor="{{dataOrig}}">{formatMessage({{moduleStartCase}}Messages.{{dataOrig}})}:</label>
+          <input type="text" className="form-control" id="{{dataOrig}}" name="{{dataOrig}}" value={this.state.{{dataOrig}}} onChange={this.handleInputChange} placeholder="{{dataOrig}}" />
+        </div>
+        {{/listData}}
+        <div className="form-group">
+          <button className="btn btn-primary" type="submit">{formatMessage({{moduleStartCase}}Messages.Save)}</button>
+          <a href="#" className="btn btn-default" onClick={this.props.history.goBack}>
+            {formatMessage({{moduleStartCase}}Messages.Cancel)}
+          </a>
+        </div>
+      </form>
+    )
+  }
+}
+
+export default injectIntl({{moduleStartCase}}Form)

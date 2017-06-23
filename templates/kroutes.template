@@ -1,0 +1,15 @@
+
+  // {{moduleStartCase}}s
+  { path: '/{{moduleNameLowerCase}}s',
+    exact: true,
+    header: () => <FormattedMessage id="{{moduleStartCase}}s.Common.ListHeader" />,
+    main: {{moduleStartCase}}Index
+  },
+  { path: '/{{moduleNameLowerCase}}_add',
+    header: () => <FormattedMessage id="{{moduleStartCase}}s.Actions.Add{{moduleStartCase}}" />,
+    main: {{moduleStartCase}}Form
+  },
+  { path: '/{{moduleNameLowerCase}}s/:id/edit',
+    header: () => <FormattedMessage id="{{moduleStartCase}}s.Actions.Edit{{moduleStartCase}}" />,
+    main: {{moduleStartCase}}Form
+  },

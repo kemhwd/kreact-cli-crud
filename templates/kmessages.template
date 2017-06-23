@@ -1,0 +1,61 @@
+import React from 'react'
+import { IntlProvider, intlShape, injectIntl, defineMessages } from 'react-intl';
+
+const {{moduleStartCase}}Messages = defineMessages({
+  ListHeader: {
+    id: '{{moduleStartCase}}s.Common.ListHeader',
+    defaultMessage: 'All {{moduleStartCase}}s'
+  },
+  Actions: {
+    id: '{{moduleStartCase}}s.Actions',
+    defaultMessage: 'Actions'
+  },
+  Save: {
+    id: '{{moduleStartCase}}s.Actions.Save',
+    defaultMessage: 'Save'
+  },
+  Cancel: {
+    id: '{{moduleStartCase}}s.Actions.Cancel',
+    defaultMessage: 'Cancel'
+  },
+  Edit: {
+    id: '{{moduleStartCase}}s.Actions.Edit',
+    defaultMessage: 'Edit'
+  },
+  Delete: {
+    id: '{{moduleStartCase}}s.Actions.Delete',
+    defaultMessage: 'Delete'
+  },
+  ConfirmDelete: {
+    id: '{{moduleStartCase}}s.Actions.ConfirmDelete',
+    defaultMessage: 'Confirm Delete'
+  },
+  AreYouSureDelete: {
+    id: '{{moduleStartCase}}s.Actions.AreYouSureDelete',
+    defaultMessage: 'Are you sure you want to delete this?'
+  },
+  Add{{moduleStartCase}}: {
+    id: '{{moduleStartCase}}s.Actions.Add{{moduleStartCase}}',
+    defaultMessage: 'Add {{moduleStartCase}}'
+  },
+  Edit{{moduleStartCase}}: {
+    id: '{{moduleStartCase}}s.Actions.Edit{{moduleStartCase}}',
+    defaultMessage: 'Edit {{moduleStartCase}}'
+  },
+{{#listData}}
+  {{dataOrig}}: {
+    id: '{{moduleStartCase}}s.Columns.{{dataOrig}}',
+    defaultMessage: '{{dataOrig}}'
+  },
+{{/listData}}
+  Status: {
+    id: '{{moduleStartCase}}s.Columns.Status',
+    defaultMessage: 'Status'
+  },
+  Created: {
+    id: '{{moduleStartCase}}s.Columns.Created',
+    defaultMessage: 'Created'
+  }
+});
+
+export default {{moduleStartCase}}Messages;
