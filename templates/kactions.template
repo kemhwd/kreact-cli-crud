@@ -32,7 +32,7 @@ class {{moduleStartCase}}Actions {
       var query = ""
       var method = "POST"
       successHandler = function (data) {
-        this.saved{{moduleStartCase}}({{moduleNameLowerCase}});
+        this.saved{{moduleStartCase}}(data);
       }.bind(this)
 
       var postData = {
@@ -51,6 +51,7 @@ class {{moduleStartCase}}Actions {
         // Update
         query = "(" + {{moduleNameLowerCase}}.{{moduleStartCase}}Id + ")"
         method = "PATCH"
+        // delete postData.{{moduleStartCase}}Id
         var successHandler = function (data) {
           this.updated{{moduleStartCase}}({{moduleNameLowerCase}})
         }.bind(this)

@@ -5,17 +5,29 @@ import { intlShape, injectIntl } from 'react-intl'
 import {{moduleStartCase}}Messages from 'resources/messages/{{moduleStartCase}}Messages'
 import {{moduleStartCase}}List from 'components/{{moduleStartCase}}s/{{moduleStartCase}}List'
 import {{moduleStartCase}}Form from 'components/{{moduleStartCase}}s/{{moduleStartCase}}Form'
+import {{moduleStartCase}}Store from 'stores/{{moduleStartCase}}Store'
 import Actions from 'actions/{{moduleStartCase}}Actions'
 
 class {{moduleStartCase}}Index extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {}
+		this.oDataQuery = '' // '?$expand=brand' // use this to join another table
+    this.state = { rows: [] }
 
     this.handleInputChange = this.handleInputChange.bind(this)
     this.addNew = this.addNew.bind(this)
+		this.listChanged = this.listChanged.bind(this)
   }
+
+	componentDidMount() {
+		{{moduleStartCase}}Store.listen(this.listChanged)
+		Actions.query{{moduleStartCase}}s(this.oDataQuery)
+	}
+
+	componentWillUnmount() {
+		{{moduleStartCase}}Store.unlisten(this.listChanged)
+	}
 
   handleInputChange(e) {
     e.preventDefault()
@@ -33,6 +45,11 @@ class {{moduleStartCase}}Index extends React.Component {
     console.log('Recycled state: ', snapshot)
     this.props.history.push('/{{moduleNameLowerCase}}_add')
   }
+
+	listChanged(store) {
+		console.log('List updated: ', store)
+		this.setState({ rows: store.{{moduleNameLowerCase}}s })
+	}
 
   render() {
     const { formatMessage } = this.props.intl
@@ -54,7 +71,7 @@ class {{moduleStartCase}}Index extends React.Component {
         </div>
         <div className="row">
           <div className="col-md-12">
-            <{{moduleStartCase}}List />
+            <{{moduleStartCase}}List rows={this.state.rows} />
           </div>
         </div>
       </div>

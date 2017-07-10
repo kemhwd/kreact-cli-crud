@@ -139,14 +139,15 @@ class {{moduleStartCase}}Form extends React.Component {
   render() {
     const { formatMessage } = this.props.intl
     return (
-      <form className="form" onSubmit={this.save{{moduleStartCase}}}>
+      <form className="form row" onSubmit={this.save{{moduleStartCase}}}>
         {{#listData}}
-        <div className="form-group">
-          <label className="control-label" htmlFor="{{dataOrig}}">{formatMessage({{moduleStartCase}}Messages.{{dataOrig}})}:</label>
+        <label className="control-label col-2 col-form-label text-right" htmlFor="{{dataOrig}}">{formatMessage({{moduleStartCase}}Messages.{{dataOrig}})}:</label>
+        <div className="form-group col-10">
           <input type="text" className="form-control" id="{{dataOrig}}" name="{{dataOrig}}" value={this.state.{{dataOrig}}} onChange={this.handleInputChange} placeholder="{{dataOrig}}" />
         </div>
         {{/listData}}
-        <div className="form-group">
+        <div className="col-2"></div>
+        <div className="form-group col-10">
           <button className="btn btn-primary" type="submit">{formatMessage({{moduleStartCase}}Messages.Save)}</button>
           <a href="#" className="btn btn-default" onClick={this.props.history.goBack}>
             {formatMessage({{moduleStartCase}}Messages.Cancel)}

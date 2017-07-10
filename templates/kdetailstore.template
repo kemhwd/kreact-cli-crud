@@ -3,45 +3,48 @@ import Actions from 'actions/{{moduleStartCase}}Actions'
 import AltInstance from 'lib/AltInstance'
 
 class {{moduleStartCase}}DetailStore {
-    constructor() {
-        
-      this.exportPublicMethods({
-        setState: this.setState
-      })
+  constructor() {
       
-      this.{{moduleNameLowerCase}} = {}
-      this.errorMessage = null
-      this.bindListeners({
-        handleFetchSingleUpdate: Actions.{{moduleNameUpperCase}}_UPDATED,
-        handleFetchSingleFailure: Actions.{{moduleNameUpperCase}}_FAILED,
-	      handleSaved: Actions.SAVED_{{moduleNameUpperCase}},
-	      handleUpdated: Actions.UPDATED_{{moduleNameUpperCase}}
-      });
+    this.exportPublicMethods({
+      setState: this.setState
+    })
 
-      this.handleFetchSingleUpdate = this.handleFetchSingleUpdate.bind(this)
-      this.handleFetchSingleFailure = this.handleFetchSingleFailure.bind(this)
+    this.state = {
+      {{moduleNameLowerCase}}: {},
+      errorMessage: null
     }
+    
+    this.bindListeners({
+      handleFetchSingleUpdate: Actions.{{moduleNameUpperCase}}_UPDATED,
+      handleFetchSingleFailure: Actions.{{moduleNameUpperCase}}_FAILED,
+      handleSaved: Actions.SAVED_{{moduleNameUpperCase}},
+      handleUpdated: Actions.UPDATED_{{moduleNameUpperCase}}
+    });
 
-    handleFetchSingleUpdate({{moduleNameLowerCase}}) {
-      this.{{moduleNameLowerCase}} = {{moduleNameLowerCase}}
-      this.errorMessage = null
-    }
+    this.handleFetchSingleUpdate = this.handleFetchSingleUpdate.bind(this)
+    this.handleFetchSingleFailure = this.handleFetchSingleFailure.bind(this)
+  }
 
-    handleFetchSingleFailure(errorMessage) {
-      this.errorMessage = errorMessage
-    }
+  handleFetchSingleUpdate({{moduleNameLowerCase}}) {
+    this.state.{{moduleNameLowerCase}} = {{moduleNameLowerCase}}
+    this.state.errorMessage = null
+  }
 
-		handleSaved({{moduleNameLowerCase}}) {
-  		this.{{moduleNameLowerCase}} = {{moduleNameLowerCase}}
-			this.action = 'saved'
-    	this.errorMessage = null
-		}
+  handleFetchSingleFailure(errorMessage) {
+    this.state.errorMessage = errorMessage
+  }
 
-		handleUpdated({{moduleNameLowerCase}}) {
-  		this.{{moduleNameLowerCase}} = {{moduleNameLowerCase}}
-			this.action = 'updated'
-    	this.errorMessage = null
-		}
+  handleSaved({{moduleNameLowerCase}}) {
+    this.state.{{moduleNameLowerCase}} = {{moduleNameLowerCase}}
+    this.state.action = 'saved'
+    this.state.errorMessage = null
+  }
+
+  handleUpdated({{moduleNameLowerCase}}) {
+    this.state.{{moduleNameLowerCase}} = {{moduleNameLowerCase}}
+    this.state.action = 'updated'
+    this.state.errorMessage = null
+  }
 
 
 }

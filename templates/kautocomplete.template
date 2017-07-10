@@ -41,24 +41,24 @@ class {{moduleStartCase}}Autocomplete extends React.Component {
     return (
       <div>
         <Autocomplete
-          wrapperStyle={{ position: 'relative', display: 'block' }}
+          wrapperStyle={ { position: 'relative', display: 'block' } }
           renderMenu={(items, value, style) => {
             style = Config.AutoCompleteStyle
             var menuStyle = { cursor: 'pointer' }
-            return <div style={{ ...style, menuStyle }} children={items} />
-          }}
-          inputProps={{ name: '{{moduleStartCase}}Name', id: '{{moduleStartCase}}Name', className: 'form-control', type: 'text' }}
+            return <div style={ { ...style, menuStyle } } children={items} />
+          } }
+          inputProps={ { name: this.props.name, id: this.props.id, className: 'form-control', type: 'text' } }
           ref='autocomplete'
           value={this.state.{{moduleStartCase}}Name}
           items={this.state.{{moduleNameLowerCase}}s}
           getItemValue={(item) => item.Name}
           onSelect={({{moduleNameLowerCase}}, item) => {
             this.props.onSelect(item)
-          }}
+          } }
           onChange={(event, {{moduleNameLowerCase}}) => {
             this.setState({ loading: true, {{moduleStartCase}}Name: event.target.value })
             this.fetch{{moduleStartCase}}s({{moduleNameLowerCase}})
-          }}
+          } }
           renderItem={(item, isHighlighted) => (
             <div
               style={isHighlighted ? { spacing: 5 } : {}}

@@ -47,33 +47,29 @@ class {{moduleStartCase}}List extends React.Component {
 
 	constructor(props) {
 		super(props)
-		this.oDataQuery = '' // '?$expand=brand' // use this to join another table
 		const { formatMessage } = this.props.intl
 
 		this._columns = [
       {{#listData}}
-        { key: '{{dataOrig}}', name: formatMessage({{moduleStartCase}}Messages.{{dataOrig}}) },
+        { key: '{{dataOrig}}', name: formatMessage({{moduleStartCase}}Messages.{{dataOrig}}), sortable: true },
       {{/listData}}
 			{
 				key: 'actions',
 				name: formatMessage({{moduleStartCase}}Messages.Actions),
+				width: 150,
 				formatter: injectIntl(RowActionsFormatter)
 			}
 		]
 
-		this.state = { rows: [] }
-		this.listChanged = this.listChanged.bind(this)
+		this.state = { rows: [], originalRows: [] }
 		this.rowGetter = this.rowGetter.bind(this)
 		this.rowCount = this.rowCount.bind(this)
+		this.handleGridSort = this.handleGridSort.bind(this)
 	}
 
-	componentDidMount() {
-		{{moduleStartCase}}Store.listen(this.listChanged)
-		Actions.query{{moduleStartCase}}s(this.oDataQuery)
-	}
-
-	componentWillUnmount() {
-		{{moduleStartCase}}Store.unlisten(this.listChanged)
+	componentWillReceiveProps(nextProps) {
+		console.log(nextProps)
+		this.setState({ rows: nextProps.rows, originalRows: nextProps.rows })
 	}
 
 	rowGetter(i) {
@@ -85,19 +81,27 @@ class {{moduleStartCase}}List extends React.Component {
 		return this.state.rows.length
 	}
 
-	listChanged(store) {
-		console.log('List updated: ', store)
-		this.setState({ rows: store.{{moduleNameLowerCase}}s })
-	}
+	handleGridSort(sortColumn, sortDirection) {
+    const comparer = (a, b) => {
+      if (sortDirection === 'ASC') {
+        return (a[sortColumn] > b[sortColumn]) ? 1 : -1
+      } else if (sortDirection === 'DESC') {
+        return (a[sortColumn] < b[sortColumn]) ? 1 : -1
+      }
+    }
+    const rows = sortDirection === 'NONE' ? this.state.originalRows.slice(0) : this.state.rows.sort(comparer)
+    this.setState({ rows });
+  }
 
 	render() {
 		return (
 			<ReactDataGrid
+				onGridSort={this.handleGridSort}
 				columns={this._columns}
 				rowGetter={this.rowGetter}
 				rowsCount={this.rowCount()}
-				rowHeight={60}
-				minHeight={500} />
+				rowHeight={40}
+				minHeight={200} />
 		);
 	}
 
