@@ -149,7 +149,7 @@ class {{moduleStartCase}}Form extends React.Component {
         <div className="col-2"></div>
         <div className="form-group col-10">
           <button className="btn btn-primary" type="submit">{formatMessage({{moduleStartCase}}Messages.Save)}</button>
-          <a href="#" className="btn btn-default" onClick={this.props.history.goBack}>
+          <a href="#" className="btn btn-danger" onClick={this.props.history.goBack}>
             {formatMessage({{moduleStartCase}}Messages.Cancel)}
           </a>
         </div>
